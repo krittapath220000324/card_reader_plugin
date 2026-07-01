@@ -1,0 +1,28 @@
+PODS:
+  - card_reader_plugin (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+  - integration_test (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - card_reader_plugin (from `.symlinks/plugins/card_reader_plugin/ios`)
+  - Flutter (from `Flutter`)
+  - integration_test (from `.symlinks/plugins/integration_test/ios`)
+
+EXTERNAL SOURCES:
+  card_reader_plugin:
+    :path: ".symlinks/plugins/card_reader_plugin/ios"
+  Flutter:
+    :path: Flutter
+  integration_test:
+    :path: ".symlinks/plugins/integration_test/ios"
+
+SPEC CHECKSUMS:
+  card_reader_plugin: 1f0dd5536250c439a5f8311305d81f54a6a50bb8
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  integration_test: 252f60fa39af5e17c3aa9899d35d908a0721b573
+
+PODFILE CHECKSUM: 840564ba1fb2766e10f377ec6d014b2aaf381976
+
+COCOAPODS: 1.16.2

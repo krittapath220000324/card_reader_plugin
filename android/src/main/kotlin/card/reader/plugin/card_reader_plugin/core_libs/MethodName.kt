@@ -1,0 +1,37 @@
+package card.reader.plugin.card_reader_plugin.core_libs
+
+enum class MethodName{
+    GET_PLATFORM_VERSION,
+    READY_TO_USED,
+
+    REQUEST_PERMISSIONS,
+
+    OPEN_LIBS,
+    UPDATE_LICENSE_FILE,
+
+    CLOSED_EVENTS_LISTENER,
+
+    SET_PERMISSIONS,
+
+    FIND_READER,
+
+    SELECT_READER,
+    DESELECT_READER,
+
+    CONNECTED_CARD,
+    DISCONNECTED_CARD,
+
+    CLOSED_LIBS,
+
+    GET_LICENSE_INFO,
+    GET_READER_INFO,
+    GET_SOFTWARE_INFO,
+
+    ID_CARD_NUMBER,
+    ID_CARD_TEXT,
+    ID_CARD_TEXT_WITH_OPTIONS,
+    ID_CARD_PHOTO,
+
+    CARD_STATUS,
+
+}

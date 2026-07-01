@@ -1,0 +1,11 @@
+
+module NiOSHardware {
+    
+    header "NiOS.h"
+    header "ft301u.h"
+    header "ReaderInterface.h"
+    header "winscard.h"
+    header "wintypes.h"
+    export *
+    
+}

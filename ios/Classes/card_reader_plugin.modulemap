@@ -1,0 +1,6 @@
+
+framework module card_reader_plugin {
+    
+    export *
+    
+}
