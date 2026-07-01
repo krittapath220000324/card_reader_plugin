@@ -7,8 +7,7 @@ class CardReaderPlugin {
   static final CardReaderPlugin _instance = CardReaderPlugin._private();
   factory CardReaderPlugin() => _instance;
 
-  final CardReaderPluginPlatform _pluginPlatform =
-      CardReaderPluginPlatform.instance;
+  final CardReaderPluginPlatform _pluginPlatform = CardReaderPluginPlatform.instance;
 
   Future<String?> getPlatformVersion() async {
     return await _pluginPlatform.getPlatformVersion();
