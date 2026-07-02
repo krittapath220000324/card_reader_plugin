@@ -293,15 +293,15 @@ class NILibsCores: NiOS{
             self.launchMain {
                 
                 /// error
-                if code != 0 {
-                    response(
-                        self.success(
-                            result: [],
-                            code: "\(code)"
-                        )
-                    )
-                    return
-                }
+//                if code != 0 {
+//                    response(
+//                        self.success(
+//                            result: [],
+//                            code: "\(code)"
+//                        )
+//                    )
+//                    return
+//                }
                 
                 /// success
                 let result:[String] = output as? [String] ?? []
