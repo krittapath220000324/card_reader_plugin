@@ -26,7 +26,9 @@ abstract class NaLibsMethodAbstract {
   Future<dynamic> closedLibrary();
 
   @protected
-  Future<dynamic> findReader();
+  Future<dynamic> findReader({
+    int? timeoutIOS
+  });
 
   @protected
   Future<dynamic> selectReader({

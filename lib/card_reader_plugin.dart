@@ -43,8 +43,12 @@ class CardReaderPlugin {
     return await _pluginPlatform.closedLibrary();
   }
 
-  Future<dynamic> findReader() async {
-    return await _pluginPlatform.findReader();
+  Future<dynamic> findReader({
+    int? timeoutIOS
+  }) async {
+    return await _pluginPlatform.findReader(
+      timeoutIOS: timeoutIOS
+    );
   }
 
   Future<dynamic> selectReader({

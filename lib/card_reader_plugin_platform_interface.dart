@@ -122,7 +122,9 @@ abstract class CardReaderPluginPlatform extends PlatformInterface
   }
 
   @override
-  Future<dynamic> findReader() {
+  Future<dynamic> findReader({
+    int? timeoutIOS
+  }) {
     throw UnimplementedError(
         "findReader() has not been implemented."
     );

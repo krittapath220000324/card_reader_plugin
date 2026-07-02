@@ -62,9 +62,12 @@ class MethodChannelCardReaderPlugin extends CardReaderPluginPlatform {
   }
 
   @override
-  Future<dynamic> findReader() async {
+  Future<dynamic> findReader({
+    int? timeoutIOS
+  }) async {
     return await _channel.invokeMethod<dynamic>(
       "FIND_READER",
+      timeoutIOS
     );
   }
 
