@@ -75,7 +75,6 @@ class NALibsCores(
     ) = withContextMain {
 
         with(response) {
-            naLibs.setListenerNA(null)
             naLibs.setListenerNA(object : ResponseListener {
 
                 override fun onOpenLibNA(code: Int) {
@@ -87,6 +86,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
 
                 }
 
@@ -112,6 +112,7 @@ class NALibsCores(
                             )
                         )
                     }
+                    naLibs.setListenerNA(null)
 
                 }
 
@@ -124,6 +125,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
                 }
 
                 override fun onGetNIDNumberNA(idCardNumber: String?, code: Int) {
@@ -138,6 +140,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
                 }
 
                 override fun onGetNIDTextNA(idCardText: String?, code: Int) {
@@ -152,6 +155,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
 
                 }
 
@@ -172,6 +176,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
                 }
 
                 override fun onUpdateLicenseFileNA(code: Int) {
@@ -183,6 +188,7 @@ class NALibsCores(
                             "code" to "$code"
                         )
                     )
+                    naLibs.setListenerNA(null)
                 }
 
             })
