@@ -214,7 +214,7 @@ class NALibsCores(
          */
 
         eventListener(response)
-        withContextMain {
+        withContextIO {
             naLibs.setPermissionsNA(1)
         }
 
@@ -230,7 +230,7 @@ class NALibsCores(
                     fileName = "rdnidlib.dls"
                 )
             }
-            withContextMain {
+            withContextIO {
                 naLibs.openLibNA(rootFolder)
             }
         } catch (e: Exception) {
@@ -303,7 +303,7 @@ class NALibsCores(
             }
 
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.getReaderListNA(optionsList)
             }
 
@@ -321,8 +321,10 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.closeLibNA().also { code ->
+            withContextIO {
+                return@withContextIO naLibs.closeLibNA()
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
@@ -349,8 +351,10 @@ class NALibsCores(
             else -> 1
         }
         try {
-            withContextMain {
-                naLibs.setPermissionsNA(pmsCode).also { code ->
+            withContextIO {
+                return@withContextIO naLibs.setPermissionsNA(pmsCode)
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
@@ -373,14 +377,17 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.setListenerNA(null)
-                success(
-                    mapOf<String, Any>(
-                        "result" to "",
-                        "code" to "0"
+            withContextIO {
+                return@withContextIO naLibs.setListenerNA(null)
+            }.let {
+                withContextMain {
+                    success(
+                        mapOf<String, Any>(
+                            "result" to "",
+                            "code" to "0"
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
             error(
@@ -396,13 +403,15 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                arrayOfNulls<String>(1).let {
-                    naLibs.getLicenseInfoNA(it).let { code ->
+            arrayOfNulls<String>(1).let {
+                withContextIO {
+                    return@withContextIO naLibs.getLicenseInfoNA(it)
+                }.let { code ->
+                    withContextMain {
                         when{
                             it.isNotEmpty() -> {
                                 val licenseInfo: String = it[0].let {
-                                    license -> license ?: ""
+                                        license -> license ?: ""
                                 }
                                 logs("getLicenseInfo: licenseInfo: $licenseInfo")
                                 success(
@@ -438,13 +447,15 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                arrayOfNulls<String>(1).let {
-                    naLibs.getReaderInfoNA(it).let { code ->
+            arrayOfNulls<String>(1).let {
+                withContextIO {
+                    return@withContextIO naLibs.getReaderInfoNA(it)
+                }.let { code ->
+                    withContextMain {
                         when{
                             it.isNotEmpty() -> {
                                 val readerInfo: String = it[0].let {
-                                    readerInfo -> readerInfo ?: ""
+                                        readerInfo -> readerInfo ?: ""
                                 }
                                 logs("getReaderInfo: readerInfo: $readerInfo")
                                 success(
@@ -480,13 +491,15 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                arrayOfNulls<String>(1).let {
-                    naLibs.getSoftwareInfoNA(it).let { code ->
+            arrayOfNulls<String>(1).let {
+                withContextIO {
+                    return@withContextIO naLibs.getSoftwareInfoNA(it)
+                }.let { code ->
+                    withContextMain {
                         when{
                             it.isNotEmpty() -> {
                                 val softwareInfo: String = it[0].let {
-                                    softwareInfo ->  softwareInfo ?: ""
+                                        softwareInfo ->  softwareInfo ?: ""
                                 }
                                 logs("getSoftwareInfo: softwareInfo: $softwareInfo")
                                 success(
@@ -528,7 +541,7 @@ class NALibsCores(
         logs("selectReader: deviceName: $deviceName")
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.selectReaderNA(deviceName)
             }
         } catch (e: Exception) {
@@ -545,8 +558,10 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.deselectReaderNA().also { code ->
+            withContextIO {
+                return@withContextIO naLibs.deselectReaderNA()
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
@@ -569,8 +584,10 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.connectCardNA().also { code ->
+            withContextIO {
+                return@withContextIO naLibs.connectCardNA()
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
@@ -593,8 +610,10 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.disconnectCardNA().also { code ->
+            withContextIO {
+                return@withContextIO naLibs.disconnectCardNA()
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
@@ -650,7 +669,7 @@ class NALibsCores(
     ) = with(response) {
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.nidNumberNA
             }
         } catch (e: Exception) {
@@ -668,7 +687,7 @@ class NALibsCores(
     ) = with(response) {
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.nidTextNA
             }
         } catch (e: Exception) {
@@ -705,7 +724,7 @@ class NALibsCores(
         }
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.getNIDTextNA(forceNumber)
             }
         } catch (e: Exception) {
@@ -723,7 +742,7 @@ class NALibsCores(
     ) = with(response) {
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.nidPhotoNA
             }
         } catch (e: Exception) {
@@ -740,8 +759,10 @@ class NALibsCores(
         response: MethodChannel.Result
     ) = with(response) {
         try {
-            withContextMain {
-                naLibs.cardStatusNA.also { code ->
+            withContextIO {
+                return@withContextIO naLibs.cardStatusNA
+            }.let { code ->
+                withContextMain {
                     success(
                         mapOf<String, Any>(
                             "result" to "",
