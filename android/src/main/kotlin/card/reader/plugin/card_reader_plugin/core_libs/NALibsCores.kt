@@ -304,7 +304,11 @@ class NALibsCores(
 
             eventListener(response)
             withContextIO {
-                naLibs.getReaderListNA(optionsList)
+                try {
+                    naLibs.getReaderListNA(optionsList)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
         } catch (e: Exception) {
