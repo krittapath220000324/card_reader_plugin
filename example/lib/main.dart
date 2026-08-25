@@ -6,9 +6,50 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:card_reader_plugin/card_reader_plugin.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 void main() {
-  runApp(const MyApp());
+  runZonedGuarded( () {
+    runApp(const MyApp());
+  }, (Object error, StackTrace stack) {
+    _buildLogsFile(error: error, stack: stack);
+  });
+}
+
+Future<void> _buildLogsFile({
+  required Object error,
+  required StackTrace stack
+}) async {
+  final cacheApps = await path.getApplicationCacheDirectory();
+  final String cachePath = cacheApps.path;
+  if(kDebugMode) print("_buildLogsFile: cachePath: $cachePath");
+
+  final String logsDirsPath = "$cachePath/logs_apps";
+  final dirs = Directory(logsDirsPath);
+
+  if(!await dirs.exists()) {
+    await dirs.create();
+  }
+
+  final String logsPath = dirs.path;
+  if(kDebugMode) print("_buildLogsFile: logsPath: $logsPath");
+
+  final String timeStamp = DateTime
+      .now()
+      .toIso8601String();
+
+  final String pathFile = "$logsPath/${timeStamp}_logs_file.txt";
+  if(kDebugMode) print("_buildLogsFile: pathFile: $pathFile");
+
+  final File file = File(pathFile);
+
+  await file.writeAsString(
+      "$stack",
+      mode: .append
+  );
+
+  if(kDebugMode) print("_buildLogsFile: writeAsString: ${file.path}");
+
 }
 
 class MyApp extends StatefulWidget {
@@ -25,11 +66,6 @@ class _MyAppElement extends StatefulElement {
 
   _MyAppElement(super.widget);
 
-  @override
-  Widget build() {
-    // TODO: implement build
-    return super.build();
-  }
 }
 
 class _MyAppState extends State<MyApp> {
@@ -39,8 +75,11 @@ class _MyAppState extends State<MyApp> {
 
   String _platformVersion = 'Unknown';
   String _readerStatus = "";
+  String _deviceName = "";
 
-  void get _updateUI => setState(() {});
+  void get _updateUI {
+    if(mounted) setState(() {});
+  }
 
   bool _waiting = false;
 
@@ -67,20 +106,29 @@ class _MyAppState extends State<MyApp> {
     _platformVersion = platformVersion;
     _updateUI;
   }
+  
+  late Size _size;
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _size = MediaQuery.of(context).size;
 
-    if(size.width > 600) {
-      size = MediaQuery.of(context).copyWith(
-        size: Size.fromWidth(450)
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp
+    ]);
+
+    if(_size.width > 600) {
+      _size = MediaQuery.of(context).copyWith(
+          size: Size.fromWidth(450)
       ).size;
     }
 
-    final double height = size.height;
-    final double width = size.width;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light(
@@ -107,14 +155,13 @@ class _MyAppState extends State<MyApp> {
             children: [
 
               _buildMain(
-                size: size,
-                height: height,
-                width: width
+                height: _size.height,
+                width: _size.width
               ),
 
               if(_waiting) Container(
-                  height: height,
-                  width: width,
+                  height: _size.height,
+                  width: _size.width,
                   color: Colors.black12,
                   alignment: Alignment.center,
                   child: SizedBox(
@@ -131,12 +178,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _buildMain({
-    required Size size,
     required double height,
     required double width,
   }) => Container(
-    height: size.height,
-    width: size.width,
+    height: _size.height,
+    width: _size.width,
     padding: const EdgeInsets.only(
         left: 16.0,
         right: 16.0
@@ -244,6 +290,28 @@ class _MyAppState extends State<MyApp> {
                         .findReader()
                         .then((result) {
                       _readerStatus = "$result";
+                      _updateUI;
+
+                      final Map<String,dynamic> hashmap = result is Map
+                          ? Map<String,dynamic>.from(result)
+                          : <String,dynamic>{};
+                      _readerStatus = "hashmap: $hashmap";
+                      _updateUI;
+                      
+                      final resultList = hashmap["result"] is List<dynamic> 
+                          ? hashmap["result"] as List<dynamic> 
+                          : [];
+                      _readerStatus = "resultList: $resultList";
+                      _updateUI;
+                      
+                      final deviceName = resultList
+                          .map((element) => element.toString())
+                          .toList();
+
+                      _readerStatus = "deviceName: $deviceName";
+                      _deviceName = deviceName.isNotEmpty
+                          ? deviceName.first
+                          : "empty device name !!";
 
                       if(_platformIOS) _waiting = false;
 
@@ -391,11 +459,18 @@ class _MyAppState extends State<MyApp> {
                     _cardReaderPlugin
                         .call()
                         .selectReader(
-                      deviceName: ""
+                        deviceName: _deviceName
                     ).then((result) {
                       _readerStatus = "$result";
                       _updateUI;
                     });
+
+                    // try {
+                    //
+                    // } on PlatformException catch (error,stack){
+                    //   _buildLogsFile(error: error, stack: stack);
+                    // }
+
                   },
                   child: Text("selectReader")
               ),

@@ -545,7 +545,7 @@ class NALibsCores(
         logs("selectReader: deviceName: $deviceName")
         try {
             eventListener(response)
-            withContextMain {
+            withContextIO {
                 naLibs.selectReaderNA(deviceName)
             }
         } catch (e: Exception) {
